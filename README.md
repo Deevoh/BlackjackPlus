@@ -5,7 +5,5 @@ The second personal project of mine. It's a simple blackjack game that includes 
 
 ## **To Do**
 
-- Implement bidding.
-- Fix loop issues.
+- Fix bidding going out of range of 0 - current bank.
 - Clean up code and create more coherent functions.
-- Add dealer RNG, possibly picking a value between 16-18 and holding?
