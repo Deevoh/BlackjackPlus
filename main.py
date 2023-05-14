@@ -129,11 +129,11 @@ while True:
                         print("It's a tie!\n")
 
                 while True:
-                    choice = input("Play again? (y/n): ")
-                    if choice.lower() == 'n':
+                    choice2 = input("Play again? (y/n): ")
+                    if choice2.lower() == 'n':
                         print(f"\nThank you for playing!\nYou cashed out with a total of ${bank}.\n")
                         exit()
-                    elif choice.lower() == 'y':
+                    elif choice2.lower() == 'y':
                         break
                     else:
                         os.system('cls' if os.name == 'nt' else 'clear')
