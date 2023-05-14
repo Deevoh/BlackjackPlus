@@ -45,86 +45,100 @@ class Player:
 
 
 while True:
+    bank = 2000
     print(logo)
-    print("Blackjack with betting and an addtional scoring mechanic.\nScore as close to 21 points as possible.\nIf the suits match in your hand, you gain an addtional ten points.\n")
+    print("Blackjack without split, but with betting and an addtional scoring mechanic.\nScore as close to 21 points as possible.\nIf all suits match in your hand, you score an addtional ten points and win 2x your bet.\n")
     player_name = input("What is your name? ")
+
     while True:
         while True:
-            deck = [(suit, rank) for suit in suits for rank in ranks]
-            random.shuffle(deck)
-            player = Player(player_name)
-            dealer = Player("Dealer")
-
-            player.draw_card(deck)
-            dealer.draw_card(deck)
-            player.draw_card(deck)
-
-            while True:
-                os.system('cls' if os.name == 'nt' else 'clear')
-                player.show_hand()
-                choice = input("Draw card? (y/n): ")
-                if choice.lower() == 'y':
-                    player.draw_card(deck)
-                    if player.points > 21:
-                        player.busted = True
-                        os.system('cls' if os.name == 'nt' else 'clear')
-                        player.show_hand()
-                        print("Bust! You lose.")
-                        choice = input("Play again? (y/n): ")
-                        if choice.lower() == 'y':
-                            break
-                        if choice.lower() == 'n':
-                            print("\nThank you for playing!\n")
-                            exit()
-                elif choice.lower() == 'n':
-                    os.system('cls' if os.name == 'nt' else 'clear')
-                    break
-                else:
-                    os.system('cls' if os.name == 'nt' else 'clear')
-                    continue
-
-            while dealer.points < 17:
+            player_win = False
+            bet = input(f"\nHow much do you want to bet? (Bank: ${bank}) $")
+            if bet.isdigit():
+                dealer_rng = random.randint(16,18)
+                deck = [(suit, rank) for suit in suits for rank in ranks]
+                random.shuffle(deck)
+                player = Player(player_name)
+                dealer = Player("Dealer")
+                player.draw_card(deck)
                 dealer.draw_card(deck)
-                if dealer.points > 21:
-                    dealer.busted = True
+                player.draw_card(deck)
+                while True:
                     os.system('cls' if os.name == 'nt' else 'clear')
                     player.show_hand()
+                    print(f"Bank: ${bank}  |  Bet: {bet}")
+                    choice = input("Draw card? (y/n): ")
+                    if choice.lower() == 'y':
+                        player.draw_card(deck)
+                        if player.points > 21:
+                            player.busted = True
+                            os.system('cls' if os.name == 'nt' else 'clear')
+                            player.show_hand()
+                            bank -= int(bet)
+                            print(f"Bank: ${bank}  |  Bet: {bet}")
+                            print("Bust! You lose.")
+                            break
+                    elif choice.lower() == 'n':
+                        os.system('cls' if os.name == 'nt' else 'clear')
+                        break
+                    else:
+                        os.system('cls' if os.name == 'nt' else 'clear')
+
+                while dealer.points < dealer_rng and not player.busted:
+                    dealer.draw_card(deck)
+                    if dealer.points > 21:
+                        dealer.busted = True
+                        os.system('cls' if os.name == 'nt' else 'clear')
+                        player.show_hand()
+                        dealer.show_hand()
+                        bank += int(bet)
+                        print(f"Bank: ${bank}  |  Bet: {bet}")
+                        print("Dealer busts! You win!\n")
+                        break
+
+                if not player.busted and not dealer.busted:
+                    player.show_hand()
+                if not dealer.busted and not player.busted:
                     dealer.show_hand()
-                    print("Dealer busts! You win!")
-                    break
 
-            if not player.busted and not dealer.busted:
-                player.show_hand()
-            if not dealer.busted:
-                dealer.show_hand()
-
-            if player.points == dealer.points and not player.busted:
-                print("It's a tie!")
-            elif player.points > dealer.points and not player.busted:
-                print("You win!")
-            elif player.busted == True:
-                print("Busted. You lost!")
-                break
-            elif player.points < dealer.points and not dealer.busted:
-                print("You lose!")
-
-            player_suits = set([card[0] for card in player.hand])
-            if len(player_suits) == 1 and player.busted == False:
-                print("Special Suit Condition: All cards in your hand are of the same suit!")
-                special_suit = player_suits.pop()
-                special_points = sum(values[card[1]] for card in player.hand)
-                special_score = special_points + 10
-                print(f"Special Suit Score: {special_score}")
-                if special_score > dealer.points and player.busted == False:
-                    print("You win with the special suit condition!")
-                elif special_score < dealer.points and player.busted == False:
-                    print("Dealer wins!")
-                elif special_score == dealer.points and player.busted == False:
+                if player.points == dealer.points and not player.busted:
+                    print(f"Bank: ${bank}  |  Bet: {bet}")
                     print("It's a tie!")
+                elif player.points > dealer.points and not player.busted:
+                    bank += int(bet)
+                    print(f"Bank: ${bank}  |  Bet: {bet}")
+                    print("You win!")
+                elif player.points < dealer.points and not dealer.busted:
+                    bank -= int(bet)
+                    print(f"Bank: ${bank}  |  Bet: {bet}")
+                    print("You lose!")
 
-            choice = input("Play again? (y/n): ")
-            if choice.lower() == 'y':
+                player_suits = {card[0] for card in player.hand}
+                if len(player_suits) == 1 and not player.busted and not player_win:
+                    print("All cards in your hand are of the same suit!")
+                    special_suit = player_suits.pop()
+                    special_points = sum(values[card[1]] for card in player.hand)
+                    special_score = special_points + 10
+                    print(f"Special Suit Score: {special_score}\n")
+                    if special_score > dealer.points and not player.busted and not player_win:
+                        bank += (int(bet) * 2)
+                        print("You turn things around and win with the special suit condition!\nYou also win 2x your bet!")
+                    elif special_score < dealer.points and not player.busted and not player_win:
+                        print("Dealer still wins!\n")
+                    elif special_score == dealer.points and not player.busted and not player_win:
+                        print("It's a tie!\n")
+
+                while True:
+                    choice = input("Play again? (y/n): ")
+                    if choice.lower() == 'n':
+                        print(f"\nThank you for playing!\nYou cashed out with a total of ${bank}.\n")
+                        exit()
+                    elif choice.lower() == 'y':
+                        break
+                    else:
+                        os.system('cls' if os.name == 'nt' else 'clear')
+                        player.show_hand()
+                        print(f"Bank: ${bank}  |  Bet: {bet}")
                 break
-            if choice.lower() == 'n':
-                print("\nThank you for playing!\n")
-                exit()
+            else:
+                print("Invalid input. Please use numbers only.")
