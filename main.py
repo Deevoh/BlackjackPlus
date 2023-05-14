@@ -74,7 +74,7 @@ while True:
                         if choice.lower() == 'y':
                             break
                         if choice.lower() == 'n':
-                            print("Thank you for playing!")
+                            print("\nThank you for playing!\n")
                             exit()
                 elif choice.lower() == 'n':
                     os.system('cls' if os.name == 'nt' else 'clear')
@@ -90,7 +90,7 @@ while True:
                     os.system('cls' if os.name == 'nt' else 'clear')
                     player.show_hand()
                     dealer.show_hand()
-                    print("Dealer busts!")
+                    print("Dealer busts! You win!")
                     break
 
             if not player.busted and not dealer.busted:
@@ -126,5 +126,5 @@ while True:
             if choice.lower() == 'y':
                 break
             if choice.lower() == 'n':
-                print("Thank you for playing!")
+                print("\nThank you for playing!\n")
                 exit()
