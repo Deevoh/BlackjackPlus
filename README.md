@@ -8,4 +8,4 @@ The second personal project of mine. It's a simple blackjack game that includes 
 - Implement bidding.
 - Fix loop issues.
 - Clean up code and create more coherent functions.
-- Add dealer RNG, possibly holding at 16-18?
+- Add dealer RNG, possibly picking a value between 16-18 and holding?
