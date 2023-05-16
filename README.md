@@ -5,10 +5,6 @@ The second personal project of mine. It's a simple blackjack game that includes 
 
 ## **To Do**
 
-- Fix double ace bug (Value of 22 is a win.. maybe auto bust?).
-- Choose ace value at 1 or 11?
-- Automatic blackjack at 21.
-- Clean up code and create more coherent functions.
+- Clean up sloppy code and create more coherent functions.
 - Make sure all special scoring conditions are met.
-- Add another mechanic for matching ranks?
-- Add dealer special scoring conditions?
+- Add another mechanic for matching ranks? Maybe a special scoring condition for the dealer?
